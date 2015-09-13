@@ -10,11 +10,11 @@ class AmexOfferBot(object):
     FILENAME_HASHTAG_MEMORY = "hashtag_memory.json"
 
     def __init__(self):
-        self.configuration = self.loadConfiguration()
-        self.tweeted_hashtags = self.loadHashtagMemory()
-        self.api = self.authenticateApi()
+        self.configuration = self.load_configuration()
+        self.tweeted_hashtags = self.load_hashtag_memory()
+        self.api = self.authenticate_api()
 
-    def loadConfiguration(self):
+    def load_configuration(self):
         try:
             configuration_file = open(AmexOfferBot.FILENAME_CONFIGURATION, "r")
             configuration = json.load(configuration_file)
@@ -29,13 +29,13 @@ class AmexOfferBot(object):
             print "Problem loading the configuration file. Exiting." + str(e)
             exit(1)
 
-    def authenticateApi(self):
+    def authenticate_api(self):
         auth = tweepy.OAuthHandler(self.configuration['consumer_key'], self.configuration['consumer_secret'])
         auth.set_access_token(self.configuration['access_token'], self.configuration['access_token_secret'])
         api = tweepy.API(auth)
         return api
 
-    def postAndRemoveOffer(self, hashtag):
+    def post_and_remove_offer(self, hashtag):
         print 'Registering'
         tweet_text = "@amexoffers " + hashtag
         current_tweet = self.api.update_status(status=tweet_text)
@@ -44,12 +44,12 @@ class AmexOfferBot(object):
         print 'Removing tweet again'
         self.api.destroy_status(current_tweet.id)
 
-    def saveHashtagMemory(self, tweeted_hashtags):
+    def save_hashtag_memory(self, tweeted_hashtags):
         memory_file = open(AmexOfferBot.FILENAME_HASHTAG_MEMORY, "w+")
         json.dump(tweeted_hashtags, memory_file)
         memory_file.close()
 
-    def loadHashtagMemory(self):
+    def load_hashtag_memory(self):
         try:
             memory_file = open(AmexOfferBot.FILENAME_HASHTAG_MEMORY, "r")
             tweeted_hashtags = json.load(memory_file)
@@ -75,14 +75,14 @@ class AmexOfferBot(object):
                 print "Found a new offer! Processing " + hashtag
                 offer_text = re.search('get (.*) w/', text).group(1)
                 print 'Offer text: ' + offer_text
-                self.postAndRemoveOffer(hashtag)
+                self.post_and_remove_offer(hashtag)
                 current_run_counter += 1
                 self.tweeted_hashtags.append(hashtag)
 
         print "Finished processing."
         print "Items processed during this run: " + str(current_run_counter)
         print "Number of offers ever processed: " + str(len(self.tweeted_hashtags))
-        self.saveHashtagMemory(self.tweeted_hashtags)
+        self.save_hashtag_memory(self.tweeted_hashtags)
 
 bot = AmexOfferBot()
 while True:
