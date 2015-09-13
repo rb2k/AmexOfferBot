@@ -16,15 +16,14 @@ class AmexOfferBot(object):
 
     def load_configuration(self):
         try:
-            configuration_file = open(AmexOfferBot.FILENAME_CONFIGURATION, "r")
-            configuration = json.load(configuration_file)
-            print 'Loaded Configuration.'
-            missing_keys = set(["consumer_key", "consumer_secret", "access_token", "access_token_secret"]) - set(configuration.viewkeys())
-            if missing_keys:
-                print "Missing configuration items: " + str(list(missing_keys))
-                exit(1)
-            configuration_file.close()
-            return configuration
+            with open(AmexOfferBot.FILENAME_CONFIGURATION, "r") as configuration_file:
+                configuration = json.load(configuration_file)
+                print 'Loaded Configuration.'
+                missing_keys = set(["consumer_key", "consumer_secret", "access_token", "access_token_secret"]) - set(configuration.viewkeys())
+                if missing_keys:
+                    print "Missing configuration items: " + str(list(missing_keys))
+                    exit(1)
+                return configuration
         except (IOError, ValueError) as e:
             print "Problem loading the configuration file. Exiting." + str(e)
             exit(1)
@@ -45,16 +44,14 @@ class AmexOfferBot(object):
         self.api.destroy_status(current_tweet.id)
 
     def save_hashtag_memory(self, tweeted_hashtags):
-        memory_file = open(AmexOfferBot.FILENAME_HASHTAG_MEMORY, "w+")
-        json.dump(tweeted_hashtags, memory_file)
-        memory_file.close()
+        with open(AmexOfferBot.FILENAME_HASHTAG_MEMORY, "w+") as memory_file:
+            json.dump(tweeted_hashtags, memory_file)
 
     def load_hashtag_memory(self):
         try:
-            memory_file = open(AmexOfferBot.FILENAME_HASHTAG_MEMORY, "r")
-            tweeted_hashtags = json.load(memory_file)
-            print 'Loaded hashtag memory. (Total items found: ' + str(len(tweeted_hashtags)) + ')'
-            memory_file.close()
+            with open(AmexOfferBot.FILENAME_HASHTAG_MEMORY, "r") as memory_file:
+                tweeted_hashtags = json.load(memory_file)
+                print 'Loaded hashtag memory. (Total items found: ' + str(len(tweeted_hashtags)) + ')'
         except (IOError, ValueError) as e:
             print "Problem loading the memory file. First start? Running with empty hashtag memory."
             tweeted_hashtags = []
