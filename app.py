@@ -18,12 +18,12 @@ class AmexOfferBot(object):
         try:
             with open(AmexOfferBot.FILENAME_CONFIGURATION, "r") as configuration_file:
                 configuration = json.load(configuration_file)
-                print 'Loaded Configuration.'
-                missing_keys = set(["consumer_key", "consumer_secret", "access_token", "access_token_secret"]) - set(configuration.viewkeys())
-                if missing_keys:
-                    print "Missing configuration items: " + str(list(missing_keys))
-                    exit(1)
-                return configuration
+            print 'Loaded Configuration.'
+            missing_keys = set(["consumer_key", "consumer_secret", "access_token", "access_token_secret"]) - set(configuration.viewkeys())
+            if missing_keys:
+                print "Missing configuration items: " + str(list(missing_keys))
+                exit(1)
+            return configuration
         except (IOError, ValueError) as e:
             print "Problem loading the configuration file. Exiting." + str(e)
             exit(1)
@@ -51,7 +51,7 @@ class AmexOfferBot(object):
         try:
             with open(AmexOfferBot.FILENAME_HASHTAG_MEMORY, "r") as memory_file:
                 tweeted_hashtags = json.load(memory_file)
-                print 'Loaded hashtag memory. (Total items found: ' + str(len(tweeted_hashtags)) + ')'
+            print 'Loaded hashtag memory. (Total items found: ' + str(len(tweeted_hashtags)) + ')'
         except (IOError, ValueError) as e:
             print "Problem loading the memory file. First start? Running with empty hashtag memory."
             tweeted_hashtags = []
