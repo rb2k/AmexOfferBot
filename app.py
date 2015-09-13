@@ -4,7 +4,7 @@ import json
 import time
 
 
-class AmexOfferBot:
+class AmexOfferBot(object):
     
     FILENAME_CONFIGURATION = "config.json"
     FILENAME_HASHTAG_MEMORY = "hashtag_memory.json"
