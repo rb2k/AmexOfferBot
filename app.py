@@ -23,7 +23,7 @@ class AmexOfferBot:
             if missing_keys:
                 print "Missing configuration items: " + str(list(missing_keys))
                 exit(1)
-            configuration_file.close
+            configuration_file.close()
             return configuration
         except (IOError, ValueError) as e:
             print "Problem loading the configuration file. Exiting." + str(e)
@@ -54,7 +54,7 @@ class AmexOfferBot:
             memory_file = open(AmexOfferBot.FILENAME_HASHTAG_MEMORY, "r")
             tweeted_hashtags = json.load(memory_file)
             print 'Loaded hashtag memory. (Total items found: ' + str(len(tweeted_hashtags)) + ')'
-            memory_file.close
+            memory_file.close()
         except (IOError, ValueError) as e:
             print "Problem loading the memory file. First start? Running with empty hashtag memory."
             tweeted_hashtags = []
